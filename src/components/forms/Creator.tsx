@@ -8,7 +8,7 @@ export default function Creator() {
     {
       name: "PRIYANSHU TIWARI",
       role: "UG Student (Dept AIML)",
-      image: "/images/team/6t28ik1mysy-image.png"
+      image: "/images/team/priyanshu_tiwari.jpg"
     },
     {
       name: "HIMANSHU TIWARI",

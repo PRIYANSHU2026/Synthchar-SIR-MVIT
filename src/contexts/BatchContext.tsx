@@ -284,16 +284,11 @@ export function BatchProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  // Matrix normalization
+  // Matrix total calculation (without auto-normalization)
   const totalMatrix = components.reduce((acc, item) => acc + (Number(item.matrix) || 0), 0);
   useEffect(() => {
     if (Math.abs(totalMatrix - 100) > 0.001 && totalMatrix > 0) {
-      setWarning("Matrix values do not sum to 100%. They will be normalized (rescaled).");
-
-      setComponents((prev) => {
-        const factor = 100 / totalMatrix;
-        return prev.map((c) => ({ ...c, matrix: c.matrix * factor }));
-      });
+      setWarning("Matrix values do not sum to 100%. Please adjust manually.");
     } else {
       setWarning("");
     }
