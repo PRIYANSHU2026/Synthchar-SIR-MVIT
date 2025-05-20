@@ -15,6 +15,7 @@ interface GeneratePdfParams {
   productWeightPercents?: number[];
   productTotalWeight?: number;
   elementComposition: ElementComposition[];
+  comments?: string; // Simple comment line
 }
 
 export const generatePdf = ({
@@ -29,7 +30,8 @@ export const generatePdf = ({
   productResults,
   productWeightPercents,
   productTotalWeight,
-  elementComposition
+  elementComposition,
+  comments = '' // Default to empty string
 }: GeneratePdfParams): void => {
   // Create a new PDF document
   const doc = new jsPDF();
@@ -38,30 +40,45 @@ export const generatePdf = ({
   doc.setFontSize(20);
   doc.text('SynthChar 1.0 - Batch Calculation Report', 14, 15);
 
+  let yOffset = 22;
+
+  // Add comment line if provided
+  if (comments && comments.trim()) {
+    doc.setFontSize(12);
+    doc.setTextColor(100, 100, 100);
+    doc.text(comments.trim(), 14, yOffset);
+    doc.setTextColor(0, 0, 0);
+    yOffset += 6; // Move down for next line
+  }
+
   // Add subtitle with date
   doc.setFontSize(12);
-  doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 22);
+  doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, yOffset);
+  yOffset += 6;
 
   // Add project affiliation
   doc.setFontSize(12);
   doc.setTextColor(0, 71, 171);
-  doc.text('Project Affiliation: SIR M. VISVESVARAYA INSTITUTE OF TECHNOLOGY, Bengaluru', 14, 28);
+  doc.text('Project Affiliation: SIR M. VISVESVARAYA INSTITUTE OF TECHNOLOGY, Bengaluru', 14, yOffset);
   doc.setTextColor(0, 0, 0);
+  yOffset += 6;
 
   // Horizontal line
   doc.setDrawColor(0, 71, 171);
   doc.setLineWidth(0.5);
-  doc.line(14, 31, 195, 31);
+  doc.line(14, yOffset + 3, 195, yOffset + 3);
+  yOffset += 6;
 
   // Add section title
   doc.setFontSize(16);
   doc.setTextColor(0, 71, 171);
-  doc.text('Precursor Matrix Calculation', 14, 40);
+  doc.text('Precursor Matrix Calculation', 14, yOffset + 3);
   doc.setTextColor(0, 0, 0);
+  yOffset += 9;
 
   // Add precursor matrix table
   autoTable(doc, {
-    startY: 45,
+    startY: yOffset + 3,
     head: [['Precursor', 'MW', 'Matrix (%)', 'Mol Qty', 'Batch wt (g)']],
     body: compResults.map((result, index) => [
       result.formula || '—',
@@ -172,6 +189,8 @@ export const generatePdf = ({
       headStyles: { fillColor: [0, 71, 171] }
     });
   }
+
+  // REMOVE THE STANDALONE COMMENTS SECTION
 
   // Add footer
   const pageCount = doc.getNumberOfPages();

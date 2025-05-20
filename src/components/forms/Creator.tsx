@@ -37,6 +37,11 @@ export default function Creator() {
       name: "Dr. Hariharan N.",
       department: "Review and Improvisation",
       image: "/images/mentors/Dr. Hariharan N..jpeg"
+    },
+    {
+      name: "Dr. SOUMYA PATIL",
+      department: "ASSOCIATE PROFESSOR & HEAD AIML (Review and Improvisation)",
+      image: "/images/mentors/Dr. SOUMYA PATIL.png"
     }
   ];
 
